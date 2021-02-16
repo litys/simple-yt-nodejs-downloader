@@ -1,7 +1,7 @@
 # Video & Music
-mkv
-mp3
-mp4
+*.mkv
+*.mp3
+*.mp4
 
 # Logs
 logs
