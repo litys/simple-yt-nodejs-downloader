@@ -45,7 +45,7 @@ function convert(quality,url){
         name = name.player_response.videoDetails.title;
 
         // Replacing special characters (eg. icons)
-        name = name.replace(/[^a-zA-Z0-9_ -]/g,'_').replace(/_{2,}/g,'_');
+        name = name.replace(/[^a-zA-Z0-9_ -.,]/g,'_').replace(/_{2,}/g,'_');
         
         if(quality=='mp4') convert_360p(name,url);
         else if(quality=='mkv') covert_best(name,url);
