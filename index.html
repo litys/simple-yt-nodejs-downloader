@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple downloader</title>
+    <style>
+        html {
+            font-size: 21px;
+        }
+        body {
+            margin: 0;
+        }
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100vw;
+            height: 100vh;
+            background-image: linear-gradient(to bottom right, #9CF3BC, #9FBDE6);
+        }
+        button {
+            background-color: #EA87C0;
+            color: white;
+            border-radius: 5px;
+            outline: none;
+            border: none;
+            padding: 15px;
+            margin-top: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: .3s;
+        }
+        button:hover {
+            background-color: #eb97c8;
+        }
+        #url {
+            background-color: rgb(248, 248, 248);
+            border: none;
+            padding: 20px;
+            border-radius: 5px;
+            outline: none;
+            min-width: 550px;
+            font-size: 1rem;
+            transition: .3s;
+        }
+        #url:hover {
+            background-color: white;
+        }
+        .controls {
+            text-align: center;
+        }
+        #alert {
+            font-size: 1.5rem;
+            -webkit-text-stroke: 1px rgb(202, 202, 202);
+            font-weight: 700;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <div>
+                <input id="url" type="text" placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ">
+            </div>
+            <div id="buttons">
+                <button onclick="convert('mp3')">MP3</button>
+                <button onclick="convert('mp4')">MP4</button>
+                <button onclick="convert('mkv')">MKV (video)</button>
+            </div>
+            <div id="alert"></div>
+        </div>
+    </div>
+
+    <script>
+        function convert(method){
+            if (method.length == 0){
+                document.getElementById('alert').innerHTML = 'Enter video URL';
+            }
+            else {
+                document.getElementById('alert').innerHTML = 'Processing...';
+                document.getElementById('buttons').style.display="none";
+                var url = document.getElementById('url').value;
+
+                if(method=='mp3'){
+                    send('/mp3',url);
+                }
+                else if(method=='mp4'){
+                    send('/mp4',url);
+                }
+                else if(method=='mkv'){
+                    send('/mkv',url);
+                }
+            }
+        }
+
+        function send(server_url,yt_url){
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("POST", server_url, false);
+            xhttp.setRequestHeader("Content-Type", "application/json");
+            // Response
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById('url').value="";
+                    document.getElementById('buttons').style.display="block";
+                    document.getElementById('alert').innerHTML = 'Successfully queued';
+                }
+                else {
+                    console.log(this);
+                    document.getElementById('buttons').style.display="block";
+                    document.getElementById('alert').innerHTML = 'Something went wrong. Check console.';
+                }
+            }
+            var data = {video:yt_url};
+            xhttp.send(JSON.stringify(data));
+        }
+    </script>
+</body>
+</html>
